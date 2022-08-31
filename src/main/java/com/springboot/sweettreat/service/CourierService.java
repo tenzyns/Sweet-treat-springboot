@@ -5,7 +5,8 @@ import com.springboot.sweettreat.entity.Courier;
 import java.util.List;
 
 public interface CourierService {
-    List<Courier> listCouriers();
+
+    List<Courier> listCouriers(String time, double distance, boolean refrigeration);
 
     Courier findCourier(long id) throws ClassNotFoundException;
 }
