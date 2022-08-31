@@ -1,0 +1,4 @@
+INSERT INTO courier (courier_id, courier_name, start_time, end_time, is_box_refrigerated, max_distance, rate_per_mile) VALUES (1, 'Bobby', '09:00', '13:00', true, 5, 1.75 );
+INSERT INTO courier (courier_id, courier_name, start_time, end_time, is_box_refrigerated, max_distance, rate_per_mile) VALUES (2, 'Martin', '09:00', '17:00', false, 3, 1.5);
+INSERT INTO courier (courier_id, courier_name, start_time, end_time, is_box_refrigerated, max_distance, rate_per_mile) VALUES (3, 'Geoff', '10:00', '16:00', true, 4, 2.0);
+INSERT INTO courier (courier_id, courier_name, start_time, end_time, is_box_refrigerated, max_distance, rate_per_mile) VALUES (4, 'Robert', '10:30', '16:30', false, 4.5, 1.65);
