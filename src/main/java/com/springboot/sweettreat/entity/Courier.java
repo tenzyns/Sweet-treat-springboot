@@ -13,20 +13,14 @@ import java.time.LocalTime;
 public class Courier {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="courier_id")
     private Long id;
-    @Column(name = "courier_name", nullable = false)
     private String name;
-    @Column(name = "start_time", nullable = false)
     private LocalTime startTime;
-    @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
-    @Column(name = "is_box_refrigerated", nullable = false)
     private Boolean isBoxRefrigerated;
-    @Column(name = "max_distance", nullable = false)
     private double maxDistance;
-    @Column(name = "rate_per_mile", nullable = false)
     private BigDecimal ratePerMile;
 
     public Courier(){};
