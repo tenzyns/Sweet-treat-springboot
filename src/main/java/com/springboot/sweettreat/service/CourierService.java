@@ -8,5 +8,7 @@ public interface CourierService {
 
     List<Courier> listCouriers(String time, double distance, boolean refrigeration);
 
-    Courier findCourier(long id) throws ClassNotFoundException;
+    Courier cheapestCourier(String time, double distance, boolean refrigeration);
+
+    Courier findCourier(long id);
 }
