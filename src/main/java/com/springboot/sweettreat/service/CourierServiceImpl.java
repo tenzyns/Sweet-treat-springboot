@@ -37,6 +37,11 @@ public class CourierServiceImpl implements CourierService {
         }
         LOGGER.addHandler(fileHandler);
     }
+
+    public CourierServiceImpl(CourierRepository courierRepository) {
+        this.courierRepository = courierRepository;
+    }
+
     public List<Courier> availableCouriers(String time, double distance, boolean refrigeration) {
         //if available return screenedCouriers else return failMsg;
         List<Courier> list = (List<Courier>) courierRepository.findAll();
@@ -57,21 +62,20 @@ public class CourierServiceImpl implements CourierService {
     @Override
     public List<Courier> listCouriers(String time, double distance, boolean refrigeration) {
         List<Courier> screenedList = availableCouriers(time, distance, refrigeration);
-        List<Courier> sortedList = new ArrayList<>();
+        List<Courier> sortedList;
 
         if (screenedList.size() == 0) {//if no courier satisfies the requirement
 
             LOGGER.log(Level.WARNING, "Unable to select a suitable courier for this order, made at " + time + ", for a distance of " + distance + " miles, refrigeration requirement: " + refrigeration);
 
-            throw new IllegalArgumentException("Courier not available for your requirement due to time or distance constraint");
+            throw new CourierNotFoundException("Courier not available for your requirement due to time or distance constraint");
 
         } else {
-            for (Courier i : screenedList) {
-                System.out.println(i);
-            }
-            System.out.println("<---Before and after sorting ---> ");
+            System.out.println("<---Courier list in order of price ---> ");
             sortedList = screenedList.stream().sorted(Comparator.comparing(Courier::getRatePerMile)).collect(Collectors.toList());
             sortedList.forEach(System.out::println);
+
+            LOGGER.log(Level.INFO, "The list of couriers in order of their price with cheapest 1st: \n" + sortedList);
             return sortedList;
         }
 
@@ -81,7 +85,7 @@ public class CourierServiceImpl implements CourierService {
         List<Courier> screenedList = availableCouriers(time, distance, refrigeration);
         int size = screenedList.size();
         if (size == 0) {
-            throw new IllegalArgumentException("Courier not available due to time and/or distance constraint");
+            throw new CourierNotFoundException("Courier not available due to time and/or distance constraint");
         } else {
             Courier cheapest = screenedList.get(0);
             for (int j = 1; j < size; j++) {
@@ -104,6 +108,6 @@ public class CourierServiceImpl implements CourierService {
         if(optionalCourier.isPresent())
             return optionalCourier.get();
         else
-            throw new CourierNotFoundException("Courier not found");
+            throw new CourierNotFoundException("No courier found!");
     }
 }

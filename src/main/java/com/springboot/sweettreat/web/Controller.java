@@ -21,18 +21,18 @@ public class Controller {
         this.courierService = courierService;
     }
 
-    @GetMapping("/cheapest")
-    public ResponseEntity<Courier> getCheapestCourier(@RequestParam String time, double distance, boolean refrigeration) {
+    @GetMapping("/cheapest/{time}/{distance}/{refrigeration}")
+    public ResponseEntity<Courier> getCheapestCourier(@PathVariable("time") String time, @PathVariable("distance") double distance, @PathVariable("refrigeration") boolean refrigeration) {
         try {
             Courier cheapest = courierService.cheapestCourier(time, distance, refrigeration);
-            return new ResponseEntity<Courier>(cheapest, HttpStatus.OK);
+            return new ResponseEntity<>(cheapest, HttpStatus.OK);
         } catch (CourierNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No couriers found!", e);
         }
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<List<Courier>> bestCouriers(@RequestParam String time, double distance, boolean refrigeration) {
+    @GetMapping("/list/{time}/{distance}/{refrigeration}")
+    public ResponseEntity<List<Courier>> bestCouriers(@PathVariable("time") String time, @PathVariable("distance") double distance, @PathVariable("refrigeration") boolean refrigeration) {
         try {
             List<Courier> list = courierService.listCouriers(time, distance, refrigeration);
             return new ResponseEntity<>(list, HttpStatus.OK);
