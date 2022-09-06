@@ -11,17 +11,14 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.*;
 import java.util.stream.Collectors;
 
 @Service
 public class CourierServiceImpl implements CourierService {
     @Autowired
-    private CourierRepository courierRepository;
+    private final CourierRepository courierRepository;
     private BigDecimal courierCost;
     private static final Logger LOGGER = Logger.getLogger(Controller.class.getName());
 
@@ -42,6 +39,7 @@ public class CourierServiceImpl implements CourierService {
         this.courierRepository = courierRepository;
     }
 
+//    Method for selecting couriers that satisfy customer requirement
     public List<Courier> availableCouriers(String time, double distance, boolean refrigeration) {
         //if available return screenedCouriers else return failMsg;
         List<Courier> list = (List<Courier>) courierRepository.findAll();
@@ -59,6 +57,8 @@ public class CourierServiceImpl implements CourierService {
         }
         return screenedCouriers;
     }
+
+//    Get operation for the list of couriers in order of price
     @Override
     public List<Courier> listCouriers(String time, double distance, boolean refrigeration) {
         List<Courier> screenedList = availableCouriers(time, distance, refrigeration);
@@ -80,6 +80,8 @@ public class CourierServiceImpl implements CourierService {
         }
 
     }
+
+//    Get operation for the cheapest courier
     @Override
     public Courier cheapestCourier(String time, double distance, boolean refrigeration) {
         List<Courier> screenedList = availableCouriers(time, distance, refrigeration);
@@ -102,6 +104,8 @@ public class CourierServiceImpl implements CourierService {
     private void setCourierCost(BigDecimal cost){
         this.courierCost = cost;
     }
+
+//    Get operation by id
     @Override
     public Courier findCourier(long id) {
         Optional<Courier> optionalCourier = courierRepository.findById(id);
@@ -110,4 +114,53 @@ public class CourierServiceImpl implements CourierService {
         else
             throw new CourierNotFoundException("No courier found!");
     }
+
+//    Create operation
+    @Override
+    public Courier addCourier(Courier courier) {
+        LOGGER.log(Level.INFO, "New courier " + courier.getName() + " has been added successfully to the system.");
+        return courierRepository.save(courier);
+    }
+
+//    Delete operation
+    @Override
+    public void deleteCourierById(Long id) {
+        courierRepository.deleteById(id);
+        LOGGER.log(Level.INFO, "Courier with id:" + id + " has been deleted successfully.");
+    }
+
+//    Update operation
+    @Override
+    public Courier updateCourierById(Courier newDetail, Long id) {
+//        fetching old courier by the given id
+        Optional<Courier> optionalCourier = courierRepository.findById(id);
+        if (optionalCourier.isPresent()) {
+           Courier oldCourier = optionalCourier.get();
+//        Checking new courier's name is not null and not an empty string
+            if (Objects.nonNull(newDetail.getName()) && !"".equalsIgnoreCase(newDetail.getName())) {
+                oldCourier.setName(newDetail.getName()); //updating the name with new name
+            }
+            if (Objects.nonNull(newDetail.getStartTime()) && !"".equals(newDetail.getStartTime().toString())) {
+                oldCourier.setStartTime(newDetail.getStartTime());
+            }
+            if (Objects.nonNull(newDetail.getEndTime()) && !"".equals(newDetail.getEndTime().toString())) {
+                oldCourier.setEndTime(newDetail.getEndTime());
+            }
+            if (Objects.nonNull(newDetail.getIsBoxRefrigerated())) {
+                oldCourier.setIsBoxRefrigerated(newDetail.getIsBoxRefrigerated()); //updating the name with new name
+            }
+            if (newDetail.getMaxDistance() >= 1) {
+                oldCourier.setMaxDistance(newDetail.getMaxDistance());
+            }
+            if (Objects.nonNull(newDetail.getRatePerMile()) && newDetail.getRatePerMile().doubleValue() > 0) {
+                oldCourier.setRatePerMile(newDetail.getRatePerMile());
+            }
+            LOGGER.log(Level.INFO, "Courier with id:" +id + " has their details updated successfully.");
+            return courierRepository.save(oldCourier);
+        } else {
+            LOGGER.log(Level.WARNING, "Courier with this id:" +id +" doesn't exist!");
+            throw new CourierNotFoundException("Courier with the id" + id + " not found");
+        }
+    }
+
 }
