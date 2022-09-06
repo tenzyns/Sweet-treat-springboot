@@ -58,7 +58,7 @@ public class CourierServiceImpl implements CourierService {
         return screenedCouriers;
     }
 
-//    Get operation for the list of couriers in order of price
+//------------ Get operation for the list of couriers in order of price  -------
     @Override
     public List<Courier> listCouriers(String time, double distance, boolean refrigeration) {
         List<Courier> screenedList = availableCouriers(time, distance, refrigeration);
@@ -81,12 +81,13 @@ public class CourierServiceImpl implements CourierService {
 
     }
 
-//    Get operation for the cheapest courier
+//------------------- Get operation for the cheapest courier -------------
     @Override
     public Courier cheapestCourier(String time, double distance, boolean refrigeration) {
         List<Courier> screenedList = availableCouriers(time, distance, refrigeration);
         int size = screenedList.size();
         if (size == 0) {
+            LOGGER.log(Level.WARNING, "No courier found for this order with time: " +time + ", delivery distance: " +distance + " miles, refrigeration requirement: " + refrigeration);
             throw new CourierNotFoundException("Courier not available due to time and/or distance constraint");
         } else {
             Courier cheapest = screenedList.get(0);
@@ -105,7 +106,7 @@ public class CourierServiceImpl implements CourierService {
         this.courierCost = cost;
     }
 
-//    Get operation by id
+//--------------------- Get operation by id  ----------------------
     @Override
     public Courier findCourier(long id) {
         Optional<Courier> optionalCourier = courierRepository.findById(id);
@@ -115,21 +116,21 @@ public class CourierServiceImpl implements CourierService {
             throw new CourierNotFoundException("No courier found!");
     }
 
-//    Create operation
+//-----------------    Create operation ----------------
     @Override
     public Courier addCourier(Courier courier) {
         LOGGER.log(Level.INFO, "New courier " + courier.getName() + " has been added successfully to the system.");
         return courierRepository.save(courier);
     }
 
-//    Delete operation
+//--------------- Delete operation-----------------
     @Override
     public void deleteCourierById(Long id) {
         courierRepository.deleteById(id);
         LOGGER.log(Level.INFO, "Courier with id:" + id + " has been deleted successfully.");
     }
 
-//    Update operation
+//----------------- Update operation  --------------------------
     @Override
     public Courier updateCourierById(Courier newDetail, Long id) {
 //        fetching old courier by the given id
