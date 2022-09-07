@@ -22,18 +22,18 @@ public class Courier {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="courier_id")
     private Long id;
-    @NotEmpty(message = "name should be valid")
+    @NotBlank(message = "Name must be provided.")
     private String name;
-    @NotNull (message = "Start-time should be valid")
+    @NotNull(message = "A valid start-time must be provided.")
     private LocalTime startTime;
-    @NotNull(message = "End-time should be valid")
+    @NotNull(message = "A valid end-time must be provided.")
     private LocalTime endTime;
-    @NotNull(message = "true or false should be valid")
+    @NotNull(message = "A true or false value must be provided.")
     private Boolean isBoxRefrigerated;
-    @Positive(message = "Max distance should be valid")
+    @Positive(message = "Max distance must be positive value.")
     private double maxDistance;
-    @NotNull(message = "rate should be valid")
-    @Positive
+    @NotNull(message = "Rate must be provided.")
+    @Positive(message = "Rate must be a positive value.")
     private BigDecimal ratePerMile;
 
     public Courier(){};
