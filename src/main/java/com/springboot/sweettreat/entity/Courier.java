@@ -1,32 +1,35 @@
 package com.springboot.sweettreat.entity;
 
+
 import lombok.Getter;
 import lombok.Setter;
 
+
 import javax.persistence.*;
+import javax.validation.constraints.*;
+
 import java.math.BigDecimal;
 import java.time.LocalTime;
-
 @Getter
 @Setter
 @Entity
 public class Courier {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="courier_id")
     private Long id;
-    @Column(name = "courier_name", nullable = false)
+    @NotBlank(message = "Name must be provided.")
     private String name;
-    @Column(name = "start_time", nullable = false)
+    @NotNull(message = "A valid start-time must be provided.")
     private LocalTime startTime;
-    @Column(name = "end_time", nullable = false)
+    @NotNull(message = "A valid end-time must be provided.")
     private LocalTime endTime;
-    @Column(name = "is_box_refrigerated", nullable = false)
+    @NotNull(message = "A true or false value must be provided.")
     private Boolean isBoxRefrigerated;
-    @Column(name = "max_distance", nullable = false)
+    @Min(value=1, message = "Max distance must be at least 1.")
     private double maxDistance;
-    @Column(name = "rate_per_mile", nullable = false)
+    @Positive(message = "Rate must be a positive value.")
     private BigDecimal ratePerMile;
 
     public Courier(){};
