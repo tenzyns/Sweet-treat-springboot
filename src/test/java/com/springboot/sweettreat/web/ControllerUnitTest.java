@@ -32,20 +32,22 @@ class ControllerUnitTest {
 
     @Test
     public void getCourierListInOrderOfPrice() throws Exception {
-        mockMvc.perform(get("/sweettreat/list/11:30/3/false"))
+        mockMvc.perform(get("/sweettreat/list/10:30/3/false"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("[]"))
-                .andExpect(jsonPath("$", hasSize(4)))
-                .andExpect((ResultMatcher) jsonPath("$[0].name", is("Martin")));
+                .andExpect(content().json("[]"));
 
-
-
-        verify(courierService, times(1)).listCouriers("11:30", 3, false);
+        verify(courierService, times(1)).listCouriers("10:30", 3, false);
     }
 
     @Test
-    void listCouriers() {
+    void getCourierById() throws Exception {
+        mockMvc.perform(get("/sweettreat/courier/2"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json("[]"));
+
+        verify(courierService, times(1)).findCourier(2);
     }
 
     @Test

@@ -6,10 +6,7 @@ import lombok.Setter;
 
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.time.LocalTime;
@@ -30,9 +27,8 @@ public class Courier {
     private LocalTime endTime;
     @NotNull(message = "A true or false value must be provided.")
     private Boolean isBoxRefrigerated;
-    @Positive(message = "Max distance must be positive value.")
+    @Min(value=1, message = "Max distance must be at least 1.")
     private double maxDistance;
-    @NotNull(message = "Rate must be provided.")
     @Positive(message = "Rate must be a positive value.")
     private BigDecimal ratePerMile;
 

@@ -28,8 +28,8 @@ public class Controller {
         try {
             Courier cheapest = courierService.cheapestCourier(time, distance, refrigeration);
             return new ResponseEntity<>(cheapest, HttpStatus.OK);
-        } catch (CourierNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No couriers found!", e);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Courier not found", e);
         }
     }
 
